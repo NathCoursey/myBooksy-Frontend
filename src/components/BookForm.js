@@ -1,19 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = process.env.REACT_APP_URL || "http://localhost:4000/";
 
-const getBooks = async (fn) => {
-    try{
-        const response = await fetch(BASE_URL + "books");
-        const allBooks = await response.json();
-        fn(allBooks)
-    } catch (error){
-        console.log(error)
-    }
-}
-
 function BookForm(props) {
 
+    const navigate = useNavigate();
     const initForm = {
         title: '',
         image: '',
@@ -27,9 +19,8 @@ function BookForm(props) {
 
     const [bookForm, setBookForm] = useState(initForm);
 
-
-
     const handleSubmit = async (e) => {
+        e.preventDefault()
         try {
             const newBook = { ...bookForm }
             const output = JSON.stringify(newBook)
@@ -43,7 +34,8 @@ function BookForm(props) {
             const URL = BASE_URL + "books"
             const response = await fetch(URL, options)
             const responseData = await response.json()
-            setBookForm(initForm)
+            console.log(responseData)
+            navigate('/books')
 
         } catch (error) {
             console.log(error)
